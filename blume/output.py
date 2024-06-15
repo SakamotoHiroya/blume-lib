@@ -92,13 +92,13 @@ center_x, center_y = find_smallest_circle_center(img)
 # 中心から円の輪郭までの距離を1度ごとに取得
 distances = get_circle_distances(img, center_x, center_y)
 
-print(distances)
 new_distances = []
 target_1_base = 0
 target_2_base = 0
 target_3_base = 0
 counter = 0
 plt.figure(figsize=(10, 6))
+scaling_factor = 7 / 360
 for angle, angle_distances in distances:
     new_distance = []
     target_1 = int((angle_distances[2] + angle_distances[3]) / 2) 
@@ -112,21 +112,21 @@ for angle, angle_distances in distances:
         target_2_base = formated_target_2
         target_3_base = formated_target_3
         counter += 1
-    new_distance.append(formated_target_1 - target_1_base)
-    new_distance.append(formated_target_2 - target_2_base)
-    new_distance.append(formated_target_3 - target_3_base)
-    new_distances.append((angle, new_distance))
-scaling_factor = 7 / 360
+    new_distance.append(round(formated_target_1 - target_1_base,2))
+    new_distance.append(round(formated_target_2 - target_2_base,2))
+    new_distance.append(round(formated_target_3 - target_3_base,2))
+    scaled_angle = round(angle * scaling_factor, 2)
+    new_distances.append((scaled_angle, new_distance))
+
+
+print(new_distances)
 
 plt.figure(figsize=(10, 6))
-for angle, angle_distances in new_distances:
-    # Apply scaling factor to angle
-    scaled_angle = [angle * scaling_factor] * len(angle_distances)
-    # Plot filtered distances
-    plt.plot(scaled_angle, angle_distances, 'o', markersize=2)
+for angle, new_distance in new_distances:
+    plt.plot([angle] * len(new_distance), new_distance, 'o', markersize=2)
 
-plt.xlabel('Angle (degrees)')
+plt.xlabel('Scaled Angle (0-7)')
 plt.ylabel('Distance (pixels)')
-plt.title('Distances from Center to Edge at Each Angle')
+plt.title('Distance from Center to Circle Edge at Each Angle')
 plt.grid(True)
 plt.show()
