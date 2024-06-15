@@ -20,9 +20,8 @@ def generate_noise(x, slopes):
     left = math.floor(x);
     right = left + 1;
 
-    print(x, left, right);
-
     l = slopes[left] * (x - left);
     r = slopes[right] * (x - right);
     x_p = smootherstep(x - left);
+
     return linerCompletion(x_p, l, r);
