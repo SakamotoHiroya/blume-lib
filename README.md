@@ -1,4 +1,4 @@
-# blume
+# blume-lib
 
 blumeは花の形をしたバーコードです。
 
