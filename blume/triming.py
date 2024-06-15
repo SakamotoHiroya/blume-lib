@@ -40,7 +40,7 @@ def crop_to_non_bg(image):
             break
     
     # 画像をトリミング
-    cropped_image = image[crop_y_top:crop_y_bottom+1, crop_x_left:crop_x_right+1]
+    cropped_image = image[crop_y_top - 4:crop_y_bottom + 4, crop_x_left - 4:crop_x_right + 4]
     
     return cropped_image
 

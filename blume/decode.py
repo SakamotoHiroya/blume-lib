@@ -60,7 +60,6 @@ def decode(x_list, y_list):
             slope_count += 1
 
         right_slope = slope_sum / slope_count
-        print(right_slope)
         slopes.append(right_slope)
 
     data_2bit = slope_to_data(slopes)
