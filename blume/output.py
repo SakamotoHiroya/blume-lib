@@ -67,7 +67,7 @@ def get_circle_distances(image, center_x, center_y):
             if binary[y, x] == 255:
                 # Hit the edge of the object
                 if distance - pre_dis != 1:
-                    angle_distances.append(pre_dis)
+                    angle_distances.append(distance)
                 pre_dis = distance
             
             distance += 1
@@ -78,55 +78,44 @@ def get_circle_distances(image, center_x, center_y):
     
     return distances
 
-# 画像を読み込む
-image_path = 'cropped_image.jpg'  # 入力画像のパスを指定
-img = cv2.imread(image_path)
+def get_distances():
+    # 画像を読み込む
+    image_path = 'cropped_image.jpg'  # 入力画像のパスを指定
+    img = cv2.imread(image_path)
 
-if img is None:
-    print("画像を読み込めませんでした。")
-    exit()
+    if img is None:
+        print("画像を読み込めませんでした。")
+        exit()
 
-# 一番小さい円の中心を見つける
-center_x, center_y = find_smallest_circle_center(img)
+    # 一番小さい円の中心を見つける
+    center_x, center_y = find_smallest_circle_center(img)
 
-# 中心から円の輪郭までの距離を1度ごとに取得
-distances = get_circle_distances(img, center_x, center_y)
+    # 中心から円の輪郭までの距離を1度ごとに取得
+    distances = get_circle_distances(img, center_x, center_y)
 
-new_distances = []
-target_1_base = 0
-target_2_base = 0
-target_3_base = 0
-counter = 0
-plt.figure(figsize=(10, 6))
-scaling_factor = 7 / 360
-for angle, angle_distances in distances:
-    new_distance = []
-    target_1 = int((angle_distances[2] + angle_distances[3]) / 2) 
-    target_2 = int((angle_distances[4] + angle_distances[5]) / 2)  
-    target_3 = int((angle_distances[6] + angle_distances[7]) / 2)
-    formated_target_3 = target_3-1
-    formated_target_2 = (target_2-3/5)*10/7
-    formated_target_1 = (target_1-5)*2
-    if counter ==0:
-        target_1_base = formated_target_1
-        target_2_base = formated_target_2
-        target_3_base = formated_target_3
-        counter += 1
-    new_distance.append(round(formated_target_1 - target_1_base,2))
-    new_distance.append(round(formated_target_2 - target_2_base,2))
-    new_distance.append(round(formated_target_3 - target_3_base,2))
-    scaled_angle = round(angle * scaling_factor, 2)
-    new_distances.append((scaled_angle, new_distance))
+    new_distances = []
+    target_1_base = 0
+    target_2_base = 0
+    target_3_base = 0
+    counter = 0
+    scaling_factor = 7 / 360
+    for angle, angle_distances in distances:
+        new_distance = []
+        target_1 = int((angle_distances[2] + angle_distances[3]) / 2) 
+        target_2 = int((angle_distances[4] + angle_distances[5]) / 2)  
+        target_3 = int((angle_distances[6] + angle_distances[7]) / 2)
+        formated_target_3 = target_3
+        formated_target_2 = target_2
+        formated_target_1 = target_1
+        if counter ==0:
+            target_1_base = formated_target_1
+            target_2_base = formated_target_2
+            target_3_base = formated_target_3
+            counter += 1
+        new_distance.append(formated_target_1 - target_1_base)
+        new_distance.append(formated_target_2 - target_2_base)
+        new_distance.append(formated_target_3 - target_3_base)
+        scaled_angle = angle * scaling_factor
+        new_distances.append((scaled_angle, new_distance))
 
-
-print(new_distances)
-
-plt.figure(figsize=(10, 6))
-for angle, new_distance in new_distances:
-    plt.plot([angle] * len(new_distance), new_distance, 'o', markersize=2)
-
-plt.xlabel('Scaled Angle (0-7)')
-plt.ylabel('Distance (pixels)')
-plt.title('Distance from Center to Circle Edge at Each Angle')
-plt.grid(True)
-plt.show()
+    return new_distances

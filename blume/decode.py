@@ -49,14 +49,19 @@ def decode(x_list, y_list):
     data_length = compute_data_length(x_list)
     for i in range(data_length):
         filtered_x_list, filtered_y_list = filter_coordinates(x_list, y_list, i);
-        if(len(filtered_x_list) < 2):
-            raise ValueError("error!")
-        else:
-            x, y = pickup_random_coordinate(filtered_x_list, filtered_y_list)
 
-            right_slope = compute_slope(x - math.floor(x), y, slopes[i])
+        slope_sum = 0
+        slope_count = 0
+        for x, y in zip(filtered_x_list, filtered_y_list):
+            if x - math.floor(x) < 0.45 or 0.55 < x - math.floor(x):
+                continue
+            slope = compute_slope(x - math.floor(x), y, slopes[i])
+            slope_sum += slope
+            slope_count += 1
 
-            slopes.append(right_slope)
+        right_slope = slope_sum / slope_count
+        print(right_slope)
+        slopes.append(right_slope)
 
     data_2bit = slope_to_data(slopes)
 

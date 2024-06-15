@@ -69,9 +69,12 @@ def encode_flower_image(width, height, base_radius, noise_strength, bytes1, byte
 
     draw_flower_circle(draw, center, base_radius, noise_strength, bytes1)
     draw_flower_circle(draw, center, base_radius * 0.6, noise_strength * 0.7, bytes2)
-    draw_flower_circle(draw, center, base_radius * 0.2, noise_strength * 0.5, bytes3)
+    draw_flower_circle(draw, center, base_radius * 0.3, noise_strength * 0.5, bytes3)
 
     draw.ellipse((center[0] - 5, center[1] - 5, center[0] + 5, center[1] + 5), outline=(255, 255, 255), fill=None, width=1)
 
     return image
+
+
+encode_flower_image(400, 400, 100, 10, [0x02, 0x01], [0x03, 0x02], [0x04, 0x03]).save('./image.png')
 
