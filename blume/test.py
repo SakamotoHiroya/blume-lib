@@ -41,9 +41,7 @@ print(decode.decode(x1, y1))
 print(decode.decode(x2, y2))
 print(decode.decode(x3, y3))
 
-plt.plot(x3, y3)
-plt.plot(x3, y3_fit)
-plt.show()
+
 
 # x, y = encode.encode_wave([0x0F, 0xFF, 0xFF])
 # print(decode.decode(x, y))
